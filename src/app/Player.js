@@ -1,13 +1,24 @@
 class Player {
+
     constructor(name) {
         this.name = name;
         this.score = 0;
     }
 
+    /**
+     * Set player symbol for game.
+     *
+     * @param { String } symbol
+     */
     setSymbol(symbol) {
         this.symbol = symbol;
     }
 
+    /**
+     * Render data of the player on the page.
+     *
+     * @param { String } container - Css class of container where need to insert data.
+     */
     render(container) {
         const wrap = document.querySelector(container);
 
@@ -15,4 +26,5 @@ class Player {
         wrap.querySelector('.player__score').innerHTML = `${this.score} won`;
         wrap.querySelector('.player__symbol').innerHTML = this.symbol;
     }
+
 }

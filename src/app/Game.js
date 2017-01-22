@@ -5,6 +5,7 @@ class Game {
         this.players = [];
         this.players[0] = new Player('Player 1');
         this.players[1] = new Player('Player 2');
+        this.board = new Board();
 
         this.start();
         this.listeners();
@@ -13,15 +14,13 @@ class Game {
     render() {
         const games = document.querySelector('.game-count');
         games.innerHTML = this.count;
+
         this.players[0].render('.player--first');
         this.players[1].render('.player--second');
     }
 
     start() {
-        this.row = 0;
-        this.cell = 0;
         this.turns = 0;
-
         const rand = Math.floor(Math.random() * 2) + 1;
 
         if (rand == 1) {
@@ -32,23 +31,12 @@ class Game {
             this.players[1].setSymbol('X');
         }
 
-        this.changeCell();
         this.render();
     }
 
     reset() {
-        this.clearBoard();
+        this.board.clear();
         this.start();
-    }
-
-    clearBoard() {
-        const board = document.querySelector('.board');
-
-        for (let i = 0; i < board.rows.length; i++) {
-            for (let j = 0; j < board.rows[i].cells.length; j++) {
-                board.rows[i].cells[j].innerHTML = '';
-            }
-        }
     }
 
     getCurrentPlayer() {
@@ -60,43 +48,32 @@ class Game {
     }
 
     move(e) {
-        if (e.keyCode == 37 && this.cell !== 0) {
-            this.cell -= 1;
-        } else if (e.keyCode == 38 && this.row !== 0) {
-            this.row -= 1;
-        } else if (e.keyCode == 39 && this.cell < 2) {
-            this.cell += 1;
-        } else if (e.keyCode == 40 && this.row < 2) {
-            this.row += 1;
+        if (e.keyCode == 37 && this.board.cell !== 0) {
+            this.board.cell -= 1;
+        } else if (e.keyCode == 38 && this.board.row !== 0) {
+            this.board.row -= 1;
+        } else if (e.keyCode == 39 && this.board.cell < 2) {
+            this.board.cell += 1;
+        } else if (e.keyCode == 40 && this.board.row < 2) {
+            this.board.row += 1;
         } else if (e.keyCode == 57) {
             this.choose();
         }
-        this.changeCell();
+
+        this.board.changeCell();
     }
 
     choose() {
-        const currentRow = document.getElementsByTagName('tr')[this.row];
-        const currentCell = currentRow.children[this.cell];
+        const currentCell = this.board.getCurrentCell();
         const player = this.getCurrentPlayer();
 
         if (currentCell.innerHTML !== '') {
             return;
         }
-
         currentCell.innerHTML = player.symbol;
 
         this.turns += 1;
         this.checkWin(player);
-    }
-
-    changeCell() {
-        const active = document.querySelector('.focus');
-        if (active) {
-            active.classList.remove('focus');
-        }
-        const currentRow = document.getElementsByTagName('tr')[this.row];
-        const currentCell = currentRow.children[this.cell];
-        currentCell.classList.add('focus');
     }
 
     checkWin(player) {
