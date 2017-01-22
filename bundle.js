@@ -62,11 +62,11 @@
 	        this.players = [];
 	        this.players[0] = new Player_1.default({
 	            name: 'Player 1',
-	            controls: { up: 38, right: 39, down: 40, left: 37, choose: 57 }
+	            controls: { up: 87, right: 68, down: 83, left: 65, choose: 90 }
 	        });
 	        this.players[1] = new Player_1.default({
 	            name: 'Player 2',
-	            controls: { up: 87, right: 68, down: 83, left: 65, choose: 90 }
+	            controls: { up: 38, right: 39, down: 40, left: 37, choose: 57 }
 	        });
 	        this.board = new Board_1.default();
 	        this.start();
@@ -98,8 +98,12 @@
 	        this.render();
 	    };
 	    Game.prototype.getCurrentPlayer = function () {
-	        // TODO: Make player X start first
-	        return (this.turns % 2 == 0) ? this.players[0] : this.players[1];
+	        if (this.players[0].symbol === 'X') {
+	            return (this.turns % 2 == 0) ? this.players[0] : this.players[1];
+	        }
+	        else {
+	            return (this.turns % 2 == 0) ? this.players[1] : this.players[0];
+	        }
 	    };
 	    Game.prototype.listeners = function () {
 	        document.addEventListener('keydown', this.move.bind(this));
