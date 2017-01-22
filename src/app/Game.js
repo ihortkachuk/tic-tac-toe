@@ -101,38 +101,39 @@ class Game {
 
     checkWin(player) {
         const table = document.querySelector('.board');
+
         if (table.rows[0].cells[0].innerHTML === player.symbol &&
             table.rows[0].cells[1].innerHTML === player.symbol &&
             table.rows[0].cells[2].innerHTML === player.symbol) {
-            this.showWin(player);
+            this.showWin(player, table.rows[0].cells[0], table.rows[0].cells[1], table.rows[0].cells[2]);
         } else if (table.rows[1].cells[0].innerHTML === player.symbol &&
             table.rows[1].cells[1].innerHTML === player.symbol &&
             table.rows[1].cells[2].innerHTML === player.symbol) {
-            this.showWin(player);
+            this.showWin(player, table.rows[1].cells[0], table.rows[1].cells[1], table.rows[1].cells[2]);
         } else if (table.rows[2].cells[0].innerHTML === player.symbol &&
             table.rows[2].cells[1].innerHTML === player.symbol &&
             table.rows[2].cells[2].innerHTML === player.symbol) {
-            this.showWin(player);
+            this.showWin(player, table.rows[2].cells[0], table.rows[2].cells[1], table.rows[2].cells[2]);
         } else if (table.rows[0].cells[0].innerHTML === player.symbol &&
             table.rows[1].cells[0].innerHTML === player.symbol &&
             table.rows[2].cells[0].innerHTML === player.symbol) {
-            this.showWin(player);
+            this.showWin(player, table.rows[0].cells[0], table.rows[1].cells[0], table.rows[2].cells[0]);
         } else if (table.rows[0].cells[1].innerHTML === player.symbol &&
             table.rows[1].cells[1].innerHTML === player.symbol &&
             table.rows[2].cells[1].innerHTML === player.symbol) {
-            this.showWin(player);
+            this.showWin(player, table.rows[0].cells[1], table.rows[1].cells[1], table.rows[2].cells[1]);
         } else if (table.rows[0].cells[2].innerHTML === player.symbol &&
             table.rows[1].cells[2].innerHTML === player.symbol &&
             table.rows[2].cells[2].innerHTML === player.symbol) {
-            this.showWin(player);
+            this.showWin(player, table.rows[0].cells[2], table.rows[1].cells[2], table.rows[2].cells[2]);
         } else if (table.rows[0].cells[0].innerHTML === player.symbol &&
             table.rows[1].cells[1].innerHTML === player.symbol &&
             table.rows[2].cells[2].innerHTML === player.symbol) {
-            this.showWin(player);
+            this.showWin(player, table.rows[0].cells[0], table.rows[1].cells[1], table.rows[2].cells[2]);
         } else if (table.rows[0].cells[2].innerHTML === player.symbol &&
             table.rows[1].cells[1].innerHTML === player.symbol &&
             table.rows[2].cells[0].innerHTML === player.symbol) {
-            this.showWin(player);
+            this.showWin(player, table.rows[0].cells[2], table.rows[1].cells[1], table.rows[2].cells[0]);
         } else {
             if (this.turns === 9) {
                 this.draw();
@@ -140,17 +141,24 @@ class Game {
         }
     }
 
-    showWin(player) {
+    showWin(player, a, b, c) {
+        a.style.color = 'red';
+        b.style.color = 'red';
+        c.style.color = 'red';
         player.score += 1;
         this.count += 1;
-        this.reset();
+        setTimeout(() => {
+            a.style.color = '';
+            b.style.color = '';
+            c.style.color = '';
+            this.reset()
+        }, 1000);
     }
 
     draw() {
         alert('It\'s a draw!');
         this.count += 1;
         this.reset();
-        this.start();
     }
 
 }
