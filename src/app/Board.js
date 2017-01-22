@@ -1,8 +1,8 @@
 class Board {
 
     constructor() {
-        this.row = 0;
-        this.cell = 0;
+        this.row = 1;
+        this.cell = 1;
         this.table = document.querySelector('.board');
 
         this.changeCell();
@@ -12,13 +12,14 @@ class Board {
      * Clear table contents and position of current cell.
      */
     clear() {
-        this.row = 0;
-        this.cell = 0;
+        this.row = 1;
+        this.cell = 1;
         this.changeCell();
 
         for (let i = 0; i < this.table.rows.length; i++) {
             for (let j = 0; j < this.table.rows[i].cells.length; j++) {
                 this.table.rows[i].cells[j].innerHTML = '';
+                this.table.rows[i].cells[j].style.color = '';
             }
         }
     }

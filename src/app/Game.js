@@ -11,6 +11,9 @@ class Game {
         this.listeners();
     }
 
+    /**
+     * Render all data of the game.
+     */
     render() {
         const games = document.querySelector('.game-count');
         games.innerHTML = this.count;
@@ -19,6 +22,9 @@ class Game {
         this.players[1].render('.player--second');
     }
 
+    /**
+     * Start game. Clear amount of turns and set symbol to players.
+     */
     start() {
         this.turns = 0;
         const rand = Math.floor(Math.random() * 2) + 1;
@@ -34,12 +40,8 @@ class Game {
         this.render();
     }
 
-    reset() {
-        this.board.clear();
-        this.start();
-    }
-
     getCurrentPlayer() {
+        // TODO: Make player X start first
         return (this.turns % 2 == 0) ? this.players[0] : this.players[1];
     }
 
@@ -48,6 +50,7 @@ class Game {
     }
 
     move(e) {
+        // TODO: Add different key for player 2
         if (e.keyCode == 37 && this.board.cell !== 0) {
             this.board.cell -= 1;
         } else if (e.keyCode == 38 && this.board.row !== 0) {
@@ -63,6 +66,9 @@ class Game {
         this.board.changeCell();
     }
 
+    /**
+     * Sets symbol of the current player to the selected cell.
+     */
     choose() {
         const currentCell = this.board.getCurrentCell();
         const player = this.getCurrentPlayer();
@@ -76,6 +82,11 @@ class Game {
         this.checkWin(player);
     }
 
+    /**
+     * Checks winning lines.
+     *
+     * @param { Object } player - Current player.
+     */
     checkWin(player) {
         const table = document.querySelector('.board');
 
@@ -118,24 +129,40 @@ class Game {
         }
     }
 
-    showWin(player, a, b, c) {
-        a.style.color = 'red';
-        b.style.color = 'red';
-        c.style.color = 'red';
+    /**
+     * Highlight winning line and start the new game.
+     *
+     * @param { Object } player - The player who won.
+     * @param { HTMLTableCellElement } firstCell
+     * @param { HTMLTableCellElement } secondCell
+     * @param { HTMLTableCellElement } thirdCell
+     */
+    showWin(player, firstCell, secondCell, thirdCell) {
+        firstCell.style.color = 'red';
+        secondCell.style.color = 'red';
+        thirdCell.style.color = 'red';
+
         player.score += 1;
         this.count += 1;
-        setTimeout(() => {
-            a.style.color = '';
-            b.style.color = '';
-            c.style.color = '';
-            this.reset()
-        }, 1000);
+
+        setTimeout(() => this.reset(), 1000);
     }
 
+    /**
+     * Called if the players played in a draw.
+     */
     draw() {
         alert('It\'s a draw!');
         this.count += 1;
         this.reset();
+    }
+
+    /**
+     * Reset game.
+     */
+    reset() {
+        this.board.clear();
+        this.start();
     }
 
 }
