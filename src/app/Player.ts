@@ -2,10 +2,18 @@ export default class Player {
     name: string;
     score: number;
     symbol: string;
+    controls: {
+        up: number,
+        right: number,
+        down: number,
+        left: number,
+        choose: number,
+    };
 
-    constructor(name) {
-        this.name = name;
+    constructor(config) {
+        this.name = config.name;
         this.score = 0;
+        this.controls = config.controls;
     }
 
     /**

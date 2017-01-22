@@ -10,8 +10,14 @@ export default class Game {
     constructor() {
         this.count = 1;
         this.players = [];
-        this.players[0] = new Player('Player 1');
-        this.players[1] = new Player('Player 2');
+        this.players[0] = new Player({
+            name: 'Player 1',
+            controls: {up: 38, right: 39, down: 40, left: 37, choose: 57}
+        });
+        this.players[1] = new Player({
+            name: 'Player 2',
+            controls: {up: 87, right: 68, down: 83, left: 65, choose: 90}
+        });
         this.board = new Board();
 
         this.start();
@@ -57,16 +63,16 @@ export default class Game {
     }
 
     move(e) {
-        // TODO: Add different key for player 2
-        if (e.keyCode == 37 && this.board.cell !== 0) {
+        const player = this.getCurrentPlayer();
+        if (e.keyCode == player.controls.left && this.board.cell !== 0) {
             this.board.cell -= 1;
-        } else if (e.keyCode == 38 && this.board.row !== 0) {
+        } else if (e.keyCode == player.controls.up && this.board.row !== 0) {
             this.board.row -= 1;
-        } else if (e.keyCode == 39 && this.board.cell < 2) {
+        } else if (e.keyCode == player.controls.right && this.board.cell < 2) {
             this.board.cell += 1;
-        } else if (e.keyCode == 40 && this.board.row < 2) {
+        } else if (e.keyCode == player.controls.down && this.board.row < 2) {
             this.board.row += 1;
-        } else if (e.keyCode == 57) {
+        } else if (e.keyCode == player.controls.choose) {
             this.choose();
         }
 
