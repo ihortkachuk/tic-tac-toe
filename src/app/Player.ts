@@ -1,4 +1,7 @@
-class Player {
+export default class Player {
+    name: string;
+    score: number;
+    symbol: string;
 
     constructor(name) {
         this.name = name;
@@ -19,7 +22,7 @@ class Player {
      *
      * @param { String } container - Css class of container where need to insert data.
      */
-    render(container) {
+    render(container: string) {
         const wrap = document.querySelector(container);
 
         wrap.querySelector('.player__name').innerHTML = this.name;

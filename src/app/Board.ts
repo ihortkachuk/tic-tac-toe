@@ -1,9 +1,12 @@
-class Board {
+export default class Board {
+    row: number;
+    cell: number;
+    table: HTMLTableElement;
 
     constructor() {
         this.row = 1;
         this.cell = 1;
-        this.table = document.querySelector('.board');
+        this.table = <HTMLTableElement>document.querySelector('.board');
 
         this.changeCell();
     }
@@ -33,7 +36,7 @@ class Board {
             activeCell.classList.remove('focus');
         }
 
-        const currentCell = this.getCurrentCell();
+        const currentCell: HTMLTableCellElement = this.getCurrentCell();
         currentCell.classList.add('focus');
     }
 
@@ -42,8 +45,8 @@ class Board {
      *
      * @returns { HTMLTableCellElement }
      */
-    getCurrentCell() {
-        const row = this.table.rows[this.row];
+    getCurrentCell(): HTMLTableCellElement {
+        const row: HTMLTableRowElement = this.table.rows[this.row];
         return row.cells[this.cell];
     }
 
