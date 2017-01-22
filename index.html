@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tic Tac Toe</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="wrap">
+    <header class="header">
+        <div class="player player--first">
+            <h2 class="player__name">Player 1</h2>
+            <p class="player__symbol"></p>
+            <p class="player__score">0 won</p>
+        </div>
+        <div class="game">
+            <h2>Game <span class="game-count">1</span></h2>
+        </div>
+        <div class="player player--second">
+            <h2 class="player__name">Player 2</h2>
+            <p class="player__symbol"></p>
+            <p class="player__score">0 won</p>
+        </div>
+    </header>
+    <main>
+        <table class="board" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </main>
+</div>
+<script src="src/app/Player.js"></script>
+<script src="src/app/Game.js"></script>
+<script src="src/index.js"></script>
+</body>
+</html>
