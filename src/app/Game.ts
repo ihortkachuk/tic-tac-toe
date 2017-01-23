@@ -173,7 +173,6 @@ export default class Game {
      * @param line
      */
     showWin(player: Player, line) {
-        console.dir(line);
         for(let i = 0; i < line.length; i++) {
             line[i].style.color = 'red';
         }
