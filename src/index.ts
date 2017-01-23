@@ -1,3 +1,5 @@
 import Game from './app/Game';
 
-const ticTacToe = new Game();
+document.addEventListener('DOMContentLoaded', () => {
+    const ticTacToe = new Game(3);
+});

@@ -2,13 +2,36 @@ export default class Board {
     row: number;
     cell: number;
     table: HTMLTableElement;
+    schema: number;
 
-    constructor() {
-        this.row = 1;
-        this.cell = 1;
-        this.table = <HTMLTableElement>document.querySelector('.board');
+    constructor(schema) {
+        this.schema = schema;
+        this.row = 0;
+        this.cell = 0;
 
+        this.render();
         this.changeCell();
+    }
+
+    render() {
+        const table = document.createElement('table');
+        table.setAttribute('border', '1');
+        table.setAttribute('cellspacing', '0');
+        table.setAttribute('cellpadding', '0');
+
+        for (let i = 0; i < this.schema; i++) {
+            const row = document.createElement('tr');
+            table.appendChild(row);
+
+            for (let j = 0; j < this.schema; j++) {
+                const cell = document.createElement('td');
+                row.appendChild(cell);
+            }
+        }
+
+        const target = document.querySelector('.square');
+        target.appendChild(table);
+        this.table = table;
     }
 
     /**

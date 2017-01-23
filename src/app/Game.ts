@@ -6,8 +6,10 @@ export default class Game {
     players: Player[];
     board: Board;
     turns: number;
+    schema: number;
 
-    constructor() {
+    constructor(schema) {
+        this.schema = schema;
         this.count = 1;
         this.players = [];
         this.players[0] = new Player({
@@ -18,7 +20,7 @@ export default class Game {
             name: 'Player 2',
             controls: {up: 38, right: 39, down: 40, left: 37, choose: 57}
         });
-        this.board = new Board();
+        this.board = new Board(this.schema);
 
         this.start();
         this.listeners();
@@ -71,9 +73,9 @@ export default class Game {
             this.board.cell -= 1;
         } else if (e.keyCode == player.controls.up && this.board.row !== 0) {
             this.board.row -= 1;
-        } else if (e.keyCode == player.controls.right && this.board.cell < 2) {
+        } else if (e.keyCode == player.controls.right && this.board.cell < this.schema - 1) {
             this.board.cell += 1;
-        } else if (e.keyCode == player.controls.down && this.board.row < 2) {
+        } else if (e.keyCode == player.controls.down && this.board.row < this.schema - 1) {
             this.board.row += 1;
         } else if (e.keyCode == player.controls.choose) {
             this.choose();
@@ -95,53 +97,72 @@ export default class Game {
         currentCell.innerHTML = player.symbol;
 
         this.turns += 1;
-        this.checkWin(player);
+        this.checkWin(this.board.row, this.board.cell, player);
     }
 
     /**
      * Checks winning lines.
      *
+     * @param x
+     * @param y
      * @param { Object } player - Current player.
      */
-    checkWin(player: Player) {
+    checkWin(x, y, player: Player) {
         const table: HTMLTableElement = this.board.table;
 
-        if (table.rows[0].cells[0].innerHTML === player.symbol &&
-            table.rows[0].cells[1].innerHTML === player.symbol &&
-            table.rows[0].cells[2].innerHTML === player.symbol) {
-            this.showWin(player, table.rows[0].cells[0], table.rows[0].cells[1], table.rows[0].cells[2]);
-        } else if (table.rows[1].cells[0].innerHTML === player.symbol &&
-            table.rows[1].cells[1].innerHTML === player.symbol &&
-            table.rows[1].cells[2].innerHTML === player.symbol) {
-            this.showWin(player, table.rows[1].cells[0], table.rows[1].cells[1], table.rows[1].cells[2]);
-        } else if (table.rows[2].cells[0].innerHTML === player.symbol &&
-            table.rows[2].cells[1].innerHTML === player.symbol &&
-            table.rows[2].cells[2].innerHTML === player.symbol) {
-            this.showWin(player, table.rows[2].cells[0], table.rows[2].cells[1], table.rows[2].cells[2]);
-        } else if (table.rows[0].cells[0].innerHTML === player.symbol &&
-            table.rows[1].cells[0].innerHTML === player.symbol &&
-            table.rows[2].cells[0].innerHTML === player.symbol) {
-            this.showWin(player, table.rows[0].cells[0], table.rows[1].cells[0], table.rows[2].cells[0]);
-        } else if (table.rows[0].cells[1].innerHTML === player.symbol &&
-            table.rows[1].cells[1].innerHTML === player.symbol &&
-            table.rows[2].cells[1].innerHTML === player.symbol) {
-            this.showWin(player, table.rows[0].cells[1], table.rows[1].cells[1], table.rows[2].cells[1]);
-        } else if (table.rows[0].cells[2].innerHTML === player.symbol &&
-            table.rows[1].cells[2].innerHTML === player.symbol &&
-            table.rows[2].cells[2].innerHTML === player.symbol) {
-            this.showWin(player, table.rows[0].cells[2], table.rows[1].cells[2], table.rows[2].cells[2]);
-        } else if (table.rows[0].cells[0].innerHTML === player.symbol &&
-            table.rows[1].cells[1].innerHTML === player.symbol &&
-            table.rows[2].cells[2].innerHTML === player.symbol) {
-            this.showWin(player, table.rows[0].cells[0], table.rows[1].cells[1], table.rows[2].cells[2]);
-        } else if (table.rows[0].cells[2].innerHTML === player.symbol &&
-            table.rows[1].cells[1].innerHTML === player.symbol &&
-            table.rows[2].cells[0].innerHTML === player.symbol) {
-            this.showWin(player, table.rows[0].cells[2], table.rows[1].cells[1], table.rows[2].cells[0]);
-        } else {
-            if (this.turns === 9) {
-                this.draw();
+        //check row
+        const row = [];
+        for (let i = 0; i < this.schema; i++) {
+            if (table.rows[x].cells[i].innerHTML !== player.symbol)
+                break;
+                row.push(table.rows[x].cells[i]);
+            if (i == this.schema - 1) {
+                this.showWin(player, row);
+                return;
             }
+        }
+
+        //check column
+        const cell = [];
+        for (let i = 0; i < this.schema; i++) {
+            if (table.rows[i].cells[y].innerHTML !== player.symbol)
+                break;
+                cell.push(table.rows[i].cells[y]);
+            if (i == this.schema - 1) {
+                this.showWin(player, cell);
+                return;
+            }
+        }
+
+        //check diagonal
+        const diagonal = [];
+        if (x == y) {
+            for (let i = 0; i < this.schema; i++) {
+                if (table.rows[i].cells[i].innerHTML !== player.symbol)
+                    break;
+                    diagonal.push(table.rows[i].cells[i]);
+                if (i == this.schema - 1) {
+                    this.showWin(player, diagonal);
+                    return;
+                }
+            }
+        }
+
+        //check anti diagonal
+        const antiDiagonal = [];
+        for (let i = 0; i < this.schema; i++) {
+            if (table.rows[i].cells[(this.schema - 1) - i].innerHTML !== player.symbol)
+                break;
+                antiDiagonal.push(table.rows[i].cells[(this.schema - 1) - i]);
+            if (i == this.schema - 1) {
+                this.showWin(player, antiDiagonal);
+                return;
+            }
+        }
+
+        //check draw
+        if (this.turns === 9) {
+            this.draw();
         }
     }
 
@@ -149,14 +170,13 @@ export default class Game {
      * Highlight winning line and start the new game.
      *
      * @param { Object } player - The player who won.
-     * @param { HTMLTableCellElement } firstCell
-     * @param { HTMLTableCellElement } secondCell
-     * @param { HTMLTableCellElement } thirdCell
+     * @param line
      */
-    showWin(player: Player, firstCell: HTMLTableCellElement, secondCell: HTMLTableCellElement, thirdCell: HTMLTableCellElement) {
-        firstCell.style.color = 'red';
-        secondCell.style.color = 'red';
-        thirdCell.style.color = 'red';
+    showWin(player: Player, line) {
+        console.dir(line);
+        for(let i = 0; i < line.length; i++) {
+            line[i].style.color = 'red';
+        }
 
         player.score += 1;
         this.count += 1;
